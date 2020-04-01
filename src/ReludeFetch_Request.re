@@ -37,7 +37,7 @@ Extracts an ArrayBuffer value from the request body, lifting any errors into the
 */
 let arrayBuffer:
   Fetch.Request.t =>
-  Relude.IO.t(Fetch.arrayBuffer, ReludeFetch_Error.t('decodeError)) =
+  Relude.IO.t(Fetch.arrayBuffer, ReludeFetch_Error.t('decodeError, 'customError)) =
   request => {
     let url = Fetch.Request.url(request);
     Raw.arrayBuffer(request)
@@ -55,7 +55,7 @@ Extracts a Blob value from the request body, lifting any errors into the ReludeF
 */
 let blob:
   Fetch.Request.t =>
-  Relude.IO.t(Fetch.blob, ReludeFetch_Error.t('decodeError)) =
+  Relude.IO.t(Fetch.blob, ReludeFetch_Error.t('decodeError, 'customError)) =
   request => {
     let url = Fetch.Request.url(request);
     Raw.blob(request)
@@ -73,7 +73,7 @@ Extracts a FormData value from the request body, lifting any errors into the Rel
 */
 let formData:
   Fetch.Request.t =>
-  Relude.IO.t(Fetch.formData, ReludeFetch_Error.t('decodeError)) =
+  Relude.IO.t(Fetch.formData, ReludeFetch_Error.t('decodeError, 'customError)) =
   request => {
     let url = Fetch.Request.url(request);
     Raw.formData(request)
@@ -91,7 +91,7 @@ Extracts a Js.Json.t value from the request body, lifting any errors into the Re
 */
 let json:
   Fetch.Request.t =>
-  Relude.IO.t(Js.Json.t, ReludeFetch_Error.t('decodeError)) =
+  Relude.IO.t(Js.Json.t, ReludeFetch_Error.t('decodeError, 'customError)) =
   request => {
     let url = Fetch.Request.url(request);
     Raw.json(request)
@@ -108,7 +108,7 @@ let json:
 Extracts a string value from the request body, lifting any errors into the ReludeFetch Error type
 */
 let text:
-  Fetch.Request.t => Relude.IO.t(string, ReludeFetch_Error.t('decodeError)) =
+  Fetch.Request.t => Relude.IO.t(string, ReludeFetch_Error.t('decodeError, 'customError)) =
   request => {
     let url = Fetch.Request.url(request);
     Raw.text(request)

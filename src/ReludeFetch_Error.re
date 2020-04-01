@@ -21,11 +21,17 @@ type decodeError('innerError) = {
   innerError: 'innerError,
 };
 
-type t('decodeError) =
+type customError('customError) = {
+  url: string,
+  innerError: 'customError,
+};
+
+type t('decodeError, 'customError) =
   | FetchError(fetchError)
   | StatusError(statusError)
   | ContentTypeError(contentTypeError)
-  | DecodeError(decodeError('decodeError));
+  | DecodeError(decodeError('decodeError))
+  | CustomError(customError('customError));
 
 let fetchError = error => FetchError(error);
 
@@ -35,8 +41,16 @@ let contentTypeError = error => ContentTypeError(error);
 
 let decodeError = error => DecodeError(error);
 
-let show: ('innerDecodeError => string, t('innerDecodeError)) => string =
-  (showDecodeError, error) =>
+let customError = error => CustomError(error);
+
+let show:
+  (
+    'innerDecodeError => string,
+    'innerCustomError => string,
+    t('innerDecodeError, 'innerCustomError)
+  ) =>
+  string =
+  (showDecodeError, showCustomError, error) =>
     switch (error) {
     | FetchError({url}) => "Fetch error: " ++ url
 
@@ -61,4 +75,10 @@ let show: ('innerDecodeError => string, t('innerDecodeError)) => string =
       ++ url
       ++ ": Decode error: "
       ++ showDecodeError(innerError)
+    | CustomError({url, innerError}) =>
+      "Custom Error: "
+      ++ url
+      ++ "; Response error: "
+      ++ showCustomError(innerError)
     };
+

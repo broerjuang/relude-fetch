@@ -14,7 +14,7 @@ module ResultE =
 
 module IOE =
   Relude.IO.WithError({
-    type t = Error.t(string);
+    type t = Error.t(string, string);
   });
 
 let (>>=) = IOE.Infix.(>>=);
@@ -82,7 +82,8 @@ describe("ReludeFetch integration tests", () => {
          | Ok(actualTodo) =>
            onDone(expect(actualTodo) |> toEqual(expectedTodo))
          | Error(error) =>
-           onDone(fail("Failed: " ++ Error.show(e => e, error))),
+           onDone(fail("Failed: " ++ Error.show(e => e, e => e, error))),
        );
   });
 });
+

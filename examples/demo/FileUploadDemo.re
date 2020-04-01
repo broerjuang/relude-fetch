@@ -9,8 +9,8 @@ module File = FormData.File;
 module API = {
   // Defines our API error type
   module Error = {
-    type t = ReludeFetch.Error.t(string);
-    let show = error => ReludeFetch.Error.show(a => a, error);
+    type t = ReludeFetch.Error.t(string, string);
+    let show = error => ReludeFetch.Error.show(a => a, b => b, error);
     module Type = {
       type nonrec t = t;
     };
@@ -123,3 +123,4 @@ let make = () => {
     <span> {React.string(state.message |> Option.getOrElse(""))} </span>
   </div>;
 };
+

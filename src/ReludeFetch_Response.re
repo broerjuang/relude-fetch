@@ -37,7 +37,10 @@ Extracts an ArrayBuffer value from the response body, lifting any errors into th
 */
 let arrayBuffer:
   Fetch.Response.t =>
-  Relude.IO.t(Fetch.arrayBuffer, ReludeFetch_Error.t('decodeError)) =
+  Relude.IO.t(
+    Fetch.arrayBuffer,
+    ReludeFetch_Error.t('decodeError, 'customError),
+  ) =
   response => {
     let url = Fetch.Response.url(response);
     Raw.arrayBuffer(response)
@@ -55,7 +58,7 @@ Extracts a Blob value from the response body, lifting any errors into the Relude
 */
 let blob:
   Fetch.Response.t =>
-  Relude.IO.t(Fetch.blob, ReludeFetch_Error.t('decodeError)) =
+  Relude.IO.t(Fetch.blob, ReludeFetch_Error.t('decodeError, 'customError)) =
   response => {
     let url = Fetch.Response.url(response);
     Raw.blob(response)
@@ -73,7 +76,10 @@ Extracts a FormData value from the response body, lifting any errors into the Re
 */
 let formData:
   Fetch.Response.t =>
-  Relude.IO.t(Fetch.formData, ReludeFetch_Error.t('decodeError)) =
+  Relude.IO.t(
+    Fetch.formData,
+    ReludeFetch_Error.t('decodeError, 'customError),
+  ) =
   response => {
     let url = Fetch.Response.url(response);
     Raw.formData(response)
@@ -91,7 +97,7 @@ Extracts a Js.Json.t value from the response body, lifting any errors into the R
 */
 let json:
   Fetch.Response.t =>
-  Relude.IO.t(Js.Json.t, ReludeFetch_Error.t('decodeError)) =
+  Relude.IO.t(Js.Json.t, ReludeFetch_Error.t('decodeError, 'customError)) =
   response => {
     let url = Fetch.Response.url(response);
     Raw.json(response)
@@ -108,7 +114,8 @@ let json:
 Extracts a string value from the response body, lifting any errors into the ReludeFetch Error type
 */
 let text:
-  Fetch.Response.t => Relude.IO.t(string, ReludeFetch_Error.t('decodeError)) =
+  Fetch.Response.t =>
+  Relude.IO.t(string, ReludeFetch_Error.t('decodeError, 'customError)) =
   response => {
     let url = Fetch.Response.url(response);
     Raw.text(response)
@@ -130,7 +137,10 @@ module StatusCode = {
   */
   let ensureRange =
       (~min: int, ~max: int, response: Fetch.Response.t)
-      : Relude.IO.t(Fetch.Response.t, ReludeFetch_Error.t('decodeError)) => {
+      : Relude.IO.t(
+          Fetch.Response.t,
+          ReludeFetch_Error.t('decodeError, 'customError),
+        ) => {
     let url = Fetch.Response.url(response);
     let code = Fetch.Response.status(response);
     code >= min && code < max
@@ -157,7 +167,7 @@ module Json = {
   let decode:
     'a 'decodeError.
     (Js.Json.t => Belt.Result.t('a, 'decodeError), Fetch.Response.t) =>
-    Relude.IO.t('a, ReludeFetch_Error.t('decodeError))
+    Relude.IO.t('a, ReludeFetch_Error.t('decodeError, 'customError))
    =
     (decode, response) => {
       let url = Fetch.Response.url(response);
@@ -172,3 +182,4 @@ module Json = {
          );
     };
 };
+

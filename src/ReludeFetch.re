@@ -37,7 +37,7 @@ module Raw = {
 /**
 Issues a GET request to a URL
 */
-let fetch: string => Relude.IO.t(Fetch.response, Error.t('decodeError)) =
+let fetch: string => Relude.IO.t(Fetch.response, Error.t('decodeError, 'customError)) =
   url =>
     Raw.fetch(url)
     |> Relude.IO.mapError(e => Error.fetchError({url, innerError: e}));
@@ -47,7 +47,7 @@ Issues a request to a URL with additional request parameters.
 */
 let fetchWithInit:
   (string, Fetch.requestInit) =>
-  Relude.IO.t(Fetch.response, Error.t('decodeError)) =
+  Relude.IO.t(Fetch.response, Error.t('decodeError, 'customError)) =
   (url, init) =>
     Raw.fetchWithInit(url, init)
     |> Relude.IO.mapError(e => Error.fetchError({url, innerError: e}));
@@ -56,7 +56,7 @@ let fetchWithInit:
 Issues a request using a full request object.
 */
 let fetchWithRequest:
-  Fetch.request => Relude.IO.t(Fetch.response, Error.t('decodeError)) =
+  Fetch.request => Relude.IO.t(Fetch.response, Error.t('decodeError, 'customError)) =
   request => {
     let url = Fetch.Request.url(request);
     Raw.fetchWithRequest(request)
@@ -68,7 +68,7 @@ Issues a request using a full request object and additional request parameters.
 */
 let fetchWithRequestInit:
   (Fetch.request, Fetch.requestInit) =>
-  Relude.IO.t(Fetch.response, Error.t('decodeError)) =
+  Relude.IO.t(Fetch.response, Error.t('decodeError, 'customError)) =
   (request, requestInit) => {
     let url = Fetch.Request.url(request);
     Raw.fetchWithRequestInit(request, requestInit)
@@ -93,7 +93,7 @@ let fetchWith =
       ~keepalive: option(bool)=?,
       url: string,
     )
-    : Relude.IO.t('a, Error.t('decodeError)) =>
+    : Relude.IO.t('a, Error.t('decodeError, 'customError)) =>
   fetchWithInit(
     url,
     Fetch.RequestInit.make(
@@ -129,7 +129,7 @@ let get =
       ~keepalive: option(bool)=?,
       url: string,
     )
-    : Relude.IO.t('a, Error.t('decodeError)) =>
+    : Relude.IO.t('a, Error.t('decodeError, 'customError)) =>
   fetchWithInit(
     url,
     Fetch.RequestInit.make(
@@ -165,7 +165,7 @@ let post =
       ~keepalive: option(bool)=?,
       url: string,
     )
-    : Relude.IO.t('a, Error.t('decodeError)) =>
+    : Relude.IO.t('a, Error.t('decodeError, 'customError)) =>
   fetchWithInit(
     url,
     Fetch.RequestInit.make(
@@ -201,7 +201,7 @@ let put =
       ~keepalive: option(bool)=?,
       url: string,
     )
-    : Relude.IO.t('a, Error.t('decodeError)) =>
+    : Relude.IO.t('a, Error.t('decodeError, 'customError)) =>
   fetchWithInit(
     url,
     Fetch.RequestInit.make(
@@ -237,7 +237,7 @@ let patch =
       ~keepalive: option(bool)=?,
       url: string,
     )
-    : Relude.IO.t('a, Error.t('decodeError)) =>
+    : Relude.IO.t('a, Error.t('decodeError, 'customError)) =>
   fetchWithInit(
     url,
     Fetch.RequestInit.make(
@@ -273,7 +273,7 @@ let delete =
       ~keepalive: option(bool)=?,
       url: string,
     )
-    : Relude.IO.t('a, Error.t('decodeError)) =>
+    : Relude.IO.t('a, Error.t('decodeError, 'customError)) =>
   fetchWithInit(
     url,
     Fetch.RequestInit.make(
