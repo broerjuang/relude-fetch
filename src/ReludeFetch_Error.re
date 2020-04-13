@@ -75,10 +75,5 @@ let show:
       ++ url
       ++ ": Decode error: "
       ++ showDecodeError(innerError)
-    | CustomError({url, innerError}) =>
-      "Custom Error: "
-      ++ url
-      ++ "; Response error: "
-      ++ showCustomError(innerError)
+    | CustomError({innerError}) => showCustomError(innerError)
     };
-
